@@ -1,0 +1,140 @@
+import React, {Component} from 'react';
+import Card from './card';
+import { graphql } from "react-apollo";
+import { gql } from "apollo-boost";
+
+const getSelfies = gql`
+{
+  getSelfies(offset: 0) {
+    male {
+      id
+      gender
+      text
+      created_at
+      screen_name
+      media
+    }
+    female {
+      id
+      gender
+      text
+      created_at
+      screen_name
+      media
+    }
+  }
+}
+`;
+
+
+
+class Album extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            bottom: false,
+            next: 0,
+            data: this.props.data,
+        };
+        this.handleScroll = this.handleScroll.bind(this);
+    }
+
+    handleScroll() {
+        const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+        const body = document.body;
+        const html = document.documentElement;
+        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
+        const windowBottom = windowHeight + window.pageYOffset;
+        if (windowBottom >= docHeight - 150) {
+            if(!this.state.bottom){
+                console.log("bottoooom")
+                this.setState({
+                    bottom: true,
+                    next: this.state.next +1,
+                });
+            }
+
+        } else {
+            if(this.state.bottom){
+                console.log("not bottom")
+                this.setState({
+                    bottom: false
+                });
+            }
+
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener("scroll", this.handleScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("scroll", this.handleScroll);
+    }
+
+    loadMore = () => {
+        console.log("next: " + this.state.next )
+        let next = this.state.next;
+
+        if(this.state.bottom){
+            return(
+                <div className="text-center">
+                    <h1>loading more ...</h1>
+                </div>)
+        }else {
+            return(
+                <div className="text-center">
+                    <h1> ... </h1>
+                </div>
+            )
+        }
+
+    }
+
+
+    displayAlbums = () => {
+        let data = this.props.data;
+
+        if(data.loading){
+            return (<h1 className="text-center">Loading data ...</h1>)
+        }else {
+            return (
+                <div className="row">
+                    <div className="col-lg-6">
+                        <div className="row">
+
+                            <Card selfies={data.getSelfies.female}/>
+
+                        </div>
+                    </div>
+                    <div className="col-lg-6">
+                        <div className="row">
+
+                            <Card selfies={data.getSelfies.male}/>
+
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    };
+
+
+    render() {
+        // console.log(this.props)
+        return (
+            <div className="album py-5 bg-light">
+                <div className="container">
+
+                    {this.displayAlbums()}
+                    {this.loadMore()}
+
+                </div>
+            </div>
+        );
+    }
+}
+
+export default graphql(getSelfies)(Album);
