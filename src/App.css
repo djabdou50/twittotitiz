@@ -1,5 +1,5 @@
 :root {
-    --jumbotron-padding-y: 3rem;
+    --jumbotron-padding-y: 2rem;
 }
 
 .jumbotron {
@@ -8,13 +8,13 @@
     margin-bottom: 0;
     background-color: #fff;
 }
+
 @media (min-width: 768px) {
     .jumbotron {
         padding-top: calc(var(--jumbotron-padding-y) * 2);
         padding-bottom: calc(var(--jumbotron-padding-y) * 2);
     }
 }
-
 .jumbotron p:last-child {
     margin-bottom: 0;
 }
@@ -33,9 +33,122 @@ footer {
 }
 
 footer p {
-    margin-bottom: .25rem;
+    margin-bottom: 0.25rem;
 }
 
-.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+.box-shadow {
+    box-shadow: 0 0.35rem 0.75rem rgba(0, 0, 0, 0.1);
+}
 
+.card-c {
+    padding-left: 8px;
+    padding-right: 8px;
+}
 
+.card-img {
+    border-radius: 3px;
+}
+
+.stream {
+    max-height: 100px;
+    height: 100px;
+    overflow: hidden;
+    font-size: small;
+    line-height: 15px;
+}
+.stream p {
+    margin: 5px;
+}
+
+.details {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    height: 100vh;
+    width: 50vw;
+    background-color: #282828;
+    top: 0;
+    left: -60vw;
+    padding: 3em;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+.details.active {
+    left: 0;
+    transition: all 0.5s ease-in-out;
+}
+.details.active .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1;
+}
+.details img {
+    align-self: center;
+    max-height: 80%;
+    max-width: 100%;
+    box-shadow: 0 0.45rem 0.95rem rgba(0, 0, 0, 0.6);
+    border-radius: 3px;
+    z-index: 2;
+}
+.details .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: white;
+    text-shadow: 0 1px 0 #000;
+    z-index: 2;
+}
+.details .meta {
+    align-self: center;
+    color: white;
+    max-width: 100%;
+    width: 100%;
+    z-index: 2;
+}
+.details .meta .tweet {
+    font-size: 1.2rem;
+    text-align: left;
+    padding-bottom: 2em;
+    padding-top: 3em;
+    text-shadow: 1px 1px 1px #09090d;
+}
+.details .meta a {
+    color: #457ec9;
+    float: right;
+    padding: 0 3em;
+}
+.details .meta .date {
+    float: left;
+    font-size: 0.8rem;
+}
+
+.masonry {
+    columns: 2 200px;
+    column-gap: 1rem;
+}
+.masonry div {
+    background: rgba(0, 0, 0, 0);
+    color: white;
+    margin: 0 1rem 1rem 0;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-weight: 900;
+    font-size: 2rem;
+    box-shadow: 0 0.35rem 0.75rem rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    overflow: hidden;
+}
+.masonry div img {
+    transition: all 0.2s ease-in-out;
+}
+.masonry div:hover img {
+    transform: scale(1.05);
+}

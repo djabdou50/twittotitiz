@@ -2,12 +2,10 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Album from './components/album';
 import './App.css';
-import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
+import client from './apolloClient';
+import Stream from './components/stream';
 
-const client = new ApolloClient({
-    uri: "http://localhost:4000/graphql"
-});
 
 function App() {
   return (
@@ -18,7 +16,13 @@ function App() {
                 <div className="navbar navbar-dark bg-dark box-shadow">
                     <div className="container d-flex justify-content-between">
                         <a href="#4" className="navbar-brand d-flex align-items-center">
-
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                 strokeLinejoin="round" className="mr-2">
+                                <path
+                                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
                             <strong>TwittoTitiz</strong>
                         </a>
                     </div>
@@ -30,16 +34,15 @@ function App() {
                 <section className="jumbotron text-center">
                     <div className="container">
                         <h1 className="jumbotron-heading">Twitto..Titiz</h1>
-                        <p className="lead text-muted">This is a test of a Machine learning that analyses twitter hashtag #selfie stream, and classifies images by male/female </p>
-                        <p>
-                            {/*<a href="#2" className="btn btn-primary my-2">Main call to action</a>*/}
-                            {/*<a href="#1" className="btn btn-secondary my-2">Secondary action</a>*/}
-                        </p>
+                        <p className="lead text-muted">This is a test of a Machine learning that analyses twitter hashtag #selfie stream,
+                            and classifies images by gender: female (left columns) / male (right columns) </p>
+                        <hr/>
+
+                        <Stream/>
+
                     </div>
                 </section>
 
-
-                {/*<Album/>*/}
                 <Album/>
 
             </main>
@@ -48,11 +51,10 @@ function App() {
                 <footer className="text-muted">
                     <div className="container">
                         <p className="float-right">
-                            <a href="#5">Back to top</a>
+                            <a href="https://twitter.com/bouziane_a">Get in touch ? </a>
                         </p>
-                        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-                        <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a
-                            href="../../getting-started/">getting started guide</a>.</p>
+                        <p>Thanks to OpenCV / TensorFlow / Flask for Image Recognition And Deep Learning micro service</p>
+                        <p>React / Apollo(server/client) / Node Js for server, mongoDB & redis for persisting data & Docker to compose all that. </p>
                     </div>
                 </footer>
 

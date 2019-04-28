@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import Card from './card';
-import { graphql, Query, ApolloConsumer  } from "react-apollo";
+import { graphql, Query, ApolloConsumer, Subscription  } from "react-apollo";
 import { gql } from "apollo-boost";
+import Notification from "./notification";
 
 const getSelfies = gql`
 query getSelfies( $offset : offsetInput){
@@ -26,6 +27,19 @@ query getSelfies( $offset : offsetInput){
 }
 `;
 
+const TWEETS_ADDED = gql`
+subscription {
+  tweetsAdded {
+    id
+    gender
+    text
+    created_at
+    screen_name
+    media
+  }
+}
+`;
+
 
 
 class Album extends Component {
@@ -36,10 +50,52 @@ class Album extends Component {
             bottom: false,
             next: 0,
             data: {},
+            details: {
+                active: false,
+                data: {}
+            },
+            notification: {}
         };
 
         this.handleScroll = this.handleScroll.bind(this);
     }
+
+
+    subsCompleted = (data) => {
+
+        let newdata = {
+            male: this.state.data.getSelfies.male,
+            female: this.state.data.getSelfies.female,
+        };
+
+        if(data.subscriptionData.data.tweetsAdded.gender === "male"){
+            newdata.male.unshift(data.subscriptionData.data.tweetsAdded)
+        }
+        if(data.subscriptionData.data.tweetsAdded.gender === "female"){
+            newdata.female.unshift(data.subscriptionData.data.tweetsAdded)
+        }
+
+        let dataSelfies = {...this.state.data};
+        dataSelfies.getSelfies = newdata;
+
+        this.setState({data : dataSelfies });
+
+        this.setState({notification : data.subscriptionData.data.tweetsAdded });
+
+    };
+
+    tweetsAdded = () => (
+        <Subscription
+            subscription={TWEETS_ADDED}
+            onSubscriptionComplete={this.subsCompleted}
+            onSubscriptionData={this.subsCompleted}
+        >
+            {({ data, loading }) => {
+
+                return "";
+            }}
+        </Subscription>
+    );
 
     handleScroll() {
         const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
@@ -68,7 +124,7 @@ class Album extends Component {
         // }
         //
         // console.log(window.pageYOffset)
-        if (windowBottom >= docHeight - 150) {
+        if (windowBottom >= docHeight - 350) {
             if(!this.state.bottom){
                 // console.log("bottoooom")
                 this.setState({
@@ -132,6 +188,7 @@ class Album extends Component {
 
 
     completed = data => {
+
         this.setState({
             data: data
         })
@@ -147,7 +204,59 @@ class Album extends Component {
         let dataSelfies = {...this.state.data};
         dataSelfies.getSelfies = newdata;
 
-        this.setState({data : dataSelfies });
+        this.setState({
+            data : dataSelfies
+        });
+
+
+    };
+
+    renderDetails = (data) => {
+        // console.log("rederdetails", data)
+
+        this.setState({
+            details: {
+                active: true,
+                data: data
+            }
+        })
+    }
+
+    closeDetails = () => {
+        this.setState({
+            details:{
+                active: false,
+                data:this.state.details.data
+            }
+        })
+    }
+
+    details = () => {
+        // console.log(this.state.details)
+
+            return(
+                <div className={this.state.details.active ? "details active" : "details" }>
+
+                    <button type="button" className="close" aria-label="Close" onClick={()=>this.closeDetails()}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+
+                    <img src={this.state.details.data.media} alt=""/>
+
+                    <div className="meta">
+                        <div className="tweet">
+                            {this.state.details.data.text}
+                        </div>
+                        <div className="date">{this.state.details.data.created_at}</div>
+                        <a href={"https://twitter.com/" + this.state.details.data.screen_name} target="_blank" rel="noopener noreferrer">@{this.state.details.data.screen_name}</a>
+                    </div>
+
+                    <div className="overlay" onClick={()=>this.closeDetails()}>
+
+                    </div>
+
+                </div>
+            );
 
     };
 
@@ -163,18 +272,19 @@ class Album extends Component {
 
                             <div className="row">
 
-                                <div className="col-6">
-                                    <div className="row">
+                                <div className="col-6 card-c ">
+                                    <div className="masonry">
 
-                                        <Card selfies={this.state.data.getSelfies.female}/>
+                                        <Card selfies={this.state.data.getSelfies.female} renderdetails={data => this.renderDetails(data)}/>
 
                                     </div>
                                 </div>
-                                <div className="col-6">
-                                    <div className="row">
+                                <div className="col-6 card-c ">
+                                    <div className="masonry">
 
-                                        <Card selfies={this.state.data.getSelfies.male}/>
+                                        <Card selfies={this.state.data.getSelfies.male } renderdetails={data => this.renderDetails(data)}/>
                                         {/*<span id="bottom">bottom</span>*/}
+
 
                                     </div>
                                 </div>
@@ -194,9 +304,15 @@ class Album extends Component {
             <div className="album py-5 bg-light">
                 <div className="container">
 
+                    <Notification notification={this.state.notification}/>
+
                     {this.album()}
 
                     {this.loadMore()}
+
+                    {this.tweetsAdded()}
+
+                    {this.details()}
 
                 </div>
             </div>
