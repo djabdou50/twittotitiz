@@ -47,7 +47,6 @@ function App() {
 
             </main>
 
-
                 <footer className="text-muted">
                     <div className="container">
                         <p className="float-right">
@@ -57,7 +56,6 @@ function App() {
                         <p>React / Apollo(server/client) / Node Js for server, mongoDB & redis for persisting data & Docker to compose all that. </p>
                     </div>
                 </footer>
-
 
         </div>
       </ApolloProvider>
