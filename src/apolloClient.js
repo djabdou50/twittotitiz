@@ -8,12 +8,9 @@ import {setContext} from 'apollo-link-context';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 
-let GQL_URI;
-if(process.env.NODE_ENV === "development"){
-    GQL_URI = 'localhost:4040/graphql';
-}else {
-    GQL_URI = process.env.GQL_URL;
-}
+
+const GQL_URI = process.env.GQL_URL || 'localhost:4040/graphql';
+
 
 const cache = new InMemoryCache();
 
