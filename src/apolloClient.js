@@ -12,7 +12,7 @@ let GQL_URI;
 if(process.env.NODE_ENV === "development"){
     GQL_URI = 'localhost:4040/graphql';
 }else {
-    GQL_URI = window.location.hostname + ":4040/graphql";
+    GQL_URI = process.env.GQL_URL;
 }
 
 const cache = new InMemoryCache();

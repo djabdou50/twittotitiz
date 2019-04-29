@@ -26,3 +26,4 @@ yarn-error.log*
 .env
 /front/
 /yarn.lock
+/.idea/
