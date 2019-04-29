@@ -27,3 +27,6 @@ yarn-error.log*
 /front/
 /yarn.lock
 /.idea/
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/misc.xml
+.idea/workspace.xml
