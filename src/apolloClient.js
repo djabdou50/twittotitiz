@@ -9,7 +9,7 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 
 
-const GQL_URI = process.env.GQL_URL || 'twittotitiz-gql.herokuapp.com/graphql';
+const GQL_URI = process.env.GQL_URL || 'twittotitiz-graphql.herokuapp.com/graphql';
 
 console.log("GQL_URI " + GQL_URI );
 
