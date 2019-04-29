@@ -40,7 +40,7 @@ const authLink = setContext(( _, {headers, ...rest}) => {
 });
 
 const wsLink = new WebSocketLink({
-    uri: `ws://${GQL_URI}`,
+    uri: `wss://${GQL_URI}`,
     options: {
         timeout: 60000,
         reconnect: true
@@ -48,7 +48,7 @@ const wsLink = new WebSocketLink({
 });
 
 const httpLink = new HttpLink({
-    uri: `http://${GQL_URI}`
+    uri: `https://${GQL_URI}`
 });
 
 const link = split(
