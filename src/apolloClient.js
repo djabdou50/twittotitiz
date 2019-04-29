@@ -11,6 +11,8 @@ import { getMainDefinition } from 'apollo-utilities';
 
 const GQL_URI = process.env.GQL_URL || 'localhost:4040/graphql';
 
+console.log("GQL_URI " + GQL_URI );
+
 
 const cache = new InMemoryCache();
 
