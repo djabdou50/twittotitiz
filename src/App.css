@@ -152,3 +152,14 @@ footer p {
 .masonry div:hover img {
     transform: scale(1.05);
 }
+@media (max-width: 768px) {
+    .details {
+        left: -100vw;
+    }
+    .details.active {
+        width: 100vw;
+    }
+    .details img {
+        max-height: 60%;
+    }
+}
