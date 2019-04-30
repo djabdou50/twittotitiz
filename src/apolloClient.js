@@ -11,9 +11,6 @@ import { getMainDefinition } from 'apollo-utilities';
 
 const GQL_URI = process.env.GQL_URL || 'twittotitiz-graphql.herokuapp.com/graphql';
 
-console.log("GQL_URI " + GQL_URI );
-
-
 const cache = new InMemoryCache();
 
 const errorLink = onError( ({graphQLErrors, networkError, operation}) => {
