@@ -20,6 +20,8 @@ class Notification extends React.Component {
         // window.focus() OR
         // window.open("http://www.google.com")
 
+        window.focus();
+        this.props.handelClickNotification(this.props.notification)
         // Lastly, Close the notification
         this.n.close(event.target.tag);
     }
@@ -42,7 +44,7 @@ class Notification extends React.Component {
                     title={this.props.notification.screen_name} // Required
                     body={this.props.notification.text}
                     icon={this.props.notification.media}
-                    tag="abcdef"
+                    tag={this.props.notification.id}
                     timeout="10000"
                     onClick={event => this.handleClick(event)}
                 />

@@ -97,51 +97,49 @@ class Album extends Component {
         </Subscription>
     );
 
+    /**
+     * choose shortest column
+     * @param elements
+     * @returns {*|(function(*, *): *)}
+     */
+    getShortestCol(elements){
+        return [].reduce.call( elements, (small, current) => {
+            return small.getBoundingClientRect().height < current.getBoundingClientRect().height ? small : current;
+        });
+    }
+
+    /**
+     * my way to handle infinit scroll
+     */
     handleScroll() {
-        const windowHeight = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-        const body = document.body;
-        const html = document.documentElement;
-        const docHeight = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight,  html.scrollHeight, html.offsetHeight);
-        const windowBottom = windowHeight + window.pageYOffset;
-
         // //for a perfect page infinit loading ...
-        // let element = document.getElementById("bottom");
-        // let rect;
-        // if(element){
-        //     rect = element.getBoundingClientRect();
-        //     console.log(rect.top, rect.right, rect.bottom, rect.left);
-        // }
-        //
-        // if (
-        //     rect.top >= 0 &&
-        //     rect.left >= 0 &&
-        //     rect.right <= (window.innerWidth || document.documentElement.clientWidth) &&
-        //     rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
-        // ) {
-        //     console.log('In the viewport!');
-        // } else {
-        //     console.log('Not in the viewport... whomp whomp');
-        // }
-        //
-        // console.log(window.pageYOffset)
-        if (windowBottom >= docHeight - 350) {
-            if(!this.state.bottom){
-                // console.log("bottoooom")
-                this.setState({
-                    bottom: true,
-                    next: this.state.next +1,
-                });
-            }
+        let elements = document.getElementsByClassName("masonry");
+        let short = this.getShortestCol(elements)
+        // console.log(short)
+        let rect;
+        if(short){
+            rect = short.getBoundingClientRect();
+            // if "half port view height" near to bottom trigger load more
+            if(rect.bottom <= (window.innerHeight * 2 || document.documentElement.clientHeight * 2)){
+                if(!this.state.bottom){
+                    // console.log("bottoooom")
+                    this.setState({
+                        bottom: true,
+                        next: this.state.next +1,
+                    });
+                }
 
-        } else {
-            if(this.state.bottom){
-                // console.log("not bottom")
-                this.setState({
-                    bottom: false
-                });
+            }else{
+                if(this.state.bottom){
+                    // console.log("not bottom")
+                    this.setState({
+                        bottom: false
+                    });
+                }
             }
 
         }
+
     }
 
     componentDidMount() {
@@ -212,7 +210,6 @@ class Album extends Component {
     };
 
     renderDetails = (data) => {
-        // console.log("rederdetails", data)
 
         this.setState({
             details: {
@@ -220,7 +217,7 @@ class Album extends Component {
                 data: data
             }
         })
-    }
+    };
 
     closeDetails = () => {
         this.setState({
@@ -276,6 +273,7 @@ class Album extends Component {
                                     <div className="masonry">
 
                                         <Card selfies={this.state.data.getSelfies.female} renderdetails={data => this.renderDetails(data)}/>
+                                        <span className="bottom female">bottom</span>
 
                                     </div>
                                 </div>
@@ -283,7 +281,7 @@ class Album extends Component {
                                     <div className="masonry">
 
                                         <Card selfies={this.state.data.getSelfies.male } renderdetails={data => this.renderDetails(data)}/>
-                                        {/*<span id="bottom">bottom</span>*/}
+                                        <span className="bottom male">bottom</span>
 
 
                                     </div>
@@ -304,7 +302,10 @@ class Album extends Component {
             <div className="album py-5 bg-light">
                 <div className="container">
 
-                    <Notification notification={this.state.notification}/>
+                    <Notification
+                        notification={this.state.notification}
+                        handelClickNotification={data => this.renderDetails(data)}
+                    />
 
                     {this.album()}
 
